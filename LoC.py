@@ -1,9 +1,8 @@
-import RenderEngine as Renderer
-# import Frame
-import Maps
-import time
 import threading
 import msvcrt
+
+import RenderEngine as Renderer
+import Maps
 
 
 class Directions():
@@ -14,7 +13,7 @@ class Directions():
     BACK = [0, 0, -1]
     FORWARD = [0, 0, 1]
     STILL = [0, 0, 0]
-    template = ["x", "y", "z"] # could add ', "t"'
+    template = ["x", "y", "z"] # could add time with ', "t"'
 
     def displace(spot, direction):
         if (direction == None):
@@ -53,17 +52,6 @@ class Character():
         if (self.cClass == "crazy"):
             return 1
         return None
-
-# def move(hero, userinput):
-#     if (checkSpot(hero.x, hero.y-1, ground)):
-#         hero.y -= 1 
-#     if (checkSpot(hero.x, hero.y+1), ground):
-#         hero.y += 1
-#     if (checkSpot(hero.x+1, hero.y), ground):
-#         hero.x += 1
-#     if (checkSpot(hero.x-1, hero.y), ground):
-#         hero.x -= 1
-#     return hero
 
 def checkSpot(spot, ground):
     print(spot)
@@ -139,8 +127,6 @@ class renderThread(threading.Thread):
             if (len(frameStack) > 0):
                 currentFrame = frameStack.pop(0)
                 currentFrame.print(True)
-            # while (len(frameStack) == 0):
-            #     time.sleep(0.1)
 
 
     def stop(self):
@@ -154,28 +140,18 @@ renderingThread.start()
 
 
 while (userinput != 'exit'):
-    # movement = parseControls(userinput)
-    # print ('Press s or n to continue:\n')
     movement = parseControls(msvcrt.getch())
     if (movement == Directions.STILL):
         userinput = 'exit'
         exit()
-    # print(input_char.upper())
-    # if input_char.upper() == b'S':
-    #     print ('YES')
     if (checkSpot(Directions.displace(hero.spot, movement), ground)):
         hero.move(movement)
         update()
-    # hero = move(hero, userinput)
     item = pickupItemAt(hero)
     if (item != None):
         inventory.append(item)
         update()
-        # hero.icon = Renderer.getSymbol("foundItem")
     else:
         hero.icon = "🦸"
-    # Renderer.renderFrame(ground, hero, inventory)
-    # Renderer.renderUI(hero.health, hero.expectedHealth(), inventory, len(ground[0]))
-    # userinput = input()
 renderingThread.stop()
 exit()
